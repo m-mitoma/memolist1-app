@@ -18,7 +18,7 @@ https://m-mitoma.github.io/memolist1-app/
 
 React(バージョン19.1.0).TypeScript(~5.8.3),Vite(バージョン 6.3.5)
 
-ESLint(バージョン 9.25.0),Prettier (バージョン 3.5.3)
+ESLint(バージョン 9.25.0),Prettier(バージョン 3.5.3)
 
 VisualStudioCode,gh-pages(バージョン 6.3.0)
 
@@ -36,3 +36,5 @@ TypeScriptでtypeエイリアスを使った型定義の使い方を学びまし
 【次回以降】
 
 次回はページネーションを導入したい。
+
+
