@@ -27,6 +27,8 @@ VisualStudioCode,gh-pages(バージョン 6.3.0)
 
 TypeScriptを導入（リファクタリング）
 
+useMemoを導入しています。
+
 【得られた学び / 挑戦した点】
 
 TypeScriptで
