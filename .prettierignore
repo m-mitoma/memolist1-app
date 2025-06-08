@@ -1,0 +1,17 @@
+# ビルド出力ディレクトリ
+/dist/
+/build/
+
+# Node.js 依存関係
+/node_modules/
+
+# ログファイル
+*.log
+
+# Git 関連
+.git/
+
+# その他の自動生成されたり、フォーマット不要なファイル
+*.min.js
+*.css.map
+README.md
