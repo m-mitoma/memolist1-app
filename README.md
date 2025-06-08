@@ -22,6 +22,10 @@ VisualStudioCode,gh-pages(バージョン 6.3.0)
 
 React勉強学習後3回目作ったアプリです。
 
+【実装上の工夫】
+
+TypeScriptを導入（リファクタリング）
+
 【得られた学び / 挑戦した点】
 
 TypeScriptで
