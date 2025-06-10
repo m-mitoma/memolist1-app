@@ -3,5 +3,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/memolist1-app/',
+  base:
+    process.env.NODE_ENV === 'production' && process.env.VERCEL
+      ? '/'
+      : '/memolist1-app/',
 });
