@@ -6,7 +6,7 @@ React基礎学習後3回目に作ったアプリです。
 
 【URL】
 
-https://m-mitoma.github.io/memolist1-app/
+https://memolist1-app.vercel.app/
 
 【工数】
 
@@ -16,12 +16,15 @@ https://m-mitoma.github.io/memolist1-app/
 
 【技術スタック】
 
-React(バージョン19.1.0).TypeScript(~5.8.3),Vite(バージョン 6.3.5)
+フロントエンド: React, TypeScript, Vite
 
-ESLint(バージョン 9.25.0),Prettier(バージョン 3.5.3)
+デプロイ・インフラ: Vercel, GitHub Pages
 
-VisualStudioCode,gh-pages(バージョン 6.3.0)
+バージョン管理: Git, GitHub
 
+パッケージ管理: npm
+
+その他ツール: ESLint, Prettier
 
 【実装上の工夫】
 
