@@ -38,7 +38,7 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1>簡易メモリスト作成</h1>
+      <h1>簡易メモリスト</h1>
       <h2>検索と並び替え</h2>
       <MemoFilter filter={filter} setFilter={setFilter} />
       <button
