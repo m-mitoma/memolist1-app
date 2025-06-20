@@ -24,7 +24,9 @@ https://memolist1-app.vercel.app/
 
 パッケージ管理: npm
 
-その他ツール: ESLint, Prettier
+コード品質 / コードフォーマット: ESLint, Prettier
+
+コードエディタ: Visual Studio Code
 
 【実装上の工夫】
 
