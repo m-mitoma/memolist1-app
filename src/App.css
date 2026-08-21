@@ -73,3 +73,68 @@ input[type='text'] {
   width: 100%;
   box-sizing: border-box;
 }
+
+.memo-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.memo-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #7d7878;
+}
+
+.memo-form input[type='text'],
+.memo-form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+.form-error {
+  color: #b3261e;
+  font-size: 0.85em;
+  margin: -10px 0 15px;
+}
+
+.memo-form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.cancel-button {
+  background-color: #7d7878;
+}
+
+.memo-item-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.delete-button {
+  background-color: #b3261e;
+}
+
+.delete-button:hover {
+  background-color: #8c1d17;
+}
+
+.editing-item {
+  outline: 2px solid #353535;
+}
+
+.no-memos-message {
+  text-align: center;
+  color: #7d7878;
+}

@@ -1,5 +1,7 @@
-import type { Memo } from './components/MemoList';
-export const memos: Memo[] = [
+import type { Memo } from './types';
+
+// 初回起動時（localStorageに何も保存されていないとき）に表示する初期データ
+export const defaultMemos: Memo[] = [
   {
     id: '1',
     title: '今日のメモ1',
@@ -57,18 +59,6 @@ export const memos: Memo[] = [
   {
     id: '10',
     title: '日々の振り返り',
-    date: '2025-02-15',
-    content: '最近の成果と課題を整理。',
-  },
-  {
-    id: '11',
-    title: '日々の振り返り2',
-    date: '2025-02-15',
-    content: '最近の成果と課題を整理。',
-  },
-  {
-    id: '12',
-    title: '日々の振り返り2',
     date: '2025-02-15',
     content: '最近の成果と課題を整理。',
   },
