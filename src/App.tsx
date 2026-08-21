@@ -11,6 +11,7 @@ import {
   type SortField,
   type SortOrder,
 } from './utils/memoUtils';
+import { isMemoArray } from './utils/memoValidation';
 import './App.css';
 
 const STORAGE_KEY = 'memolist1_memos';
@@ -20,7 +21,15 @@ const loadInitialMemos = (): Memo[] => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      return JSON.parse(saved) as Memo[];
+      // JSON.parseの戻り値はany型なので、まずunknownとして受け取り、
+      // isMemoArrayで実際にMemo[]の形をしているか確認してから使う。
+      const parsed: unknown = JSON.parse(saved);
+      if (isMemoArray(parsed)) {
+        return parsed;
+      }
+      console.warn(
+        'localStorageのメモの形式が想定と異なるため、初期データを使用します',
+      );
     }
   } catch (error) {
     console.error('メモの読み込みに失敗しました', error);

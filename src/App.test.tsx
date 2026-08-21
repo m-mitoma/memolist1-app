@@ -27,6 +27,16 @@ describe('App（メモの追加・編集・削除・永続化）', () => {
     expect(screen.getAllByText(/^ID: /)).toHaveLength(10);
   });
 
+  it('localStorageの中身が壊れている（Memo[]の形をしていない）場合は初期データにフォールバックする', () => {
+    // 想定と違う形のデータが入っているケース（例：仕様変更前の古いデータや改ざん）
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([{ foo: 'bar' }]));
+
+    render(<App />);
+
+    // 壊れたデータではなく、初期データ（10件）が表示される
+    expect(screen.getAllByText(/^ID: /)).toHaveLength(10);
+  });
+
   it('メモを追加すると一覧に表示され、localStorageにも保存される', async () => {
     const user = userEvent.setup();
     render(<App />);
