@@ -1,5 +1,6 @@
 // vite.config.js
-import { defineConfig } from 'vite';
+/// <reference types="vitest/config" />
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -8,4 +9,9 @@ export default defineConfig({
     process.env.NODE_ENV === 'production' && process.env.VERCEL
       ? '/'
       : '/memolist1-app/',
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/setupTests.ts',
+  },
 });

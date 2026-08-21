@@ -12,6 +12,7 @@ https://memolist1-app.vercel.app/
 
 【技術スタック】  
 フロントエンド: React, TypeScript, Vite, React Hook Form  
+テスト: Vitest, React Testing Library  
 デプロイ・インフラ: Vercel  
 バージョン管理: Git, GitHub  
 パッケージ管理: npm  
@@ -22,11 +23,15 @@ https://memolist1-app.vercel.app/
 TypeScriptを導入（リファクタリング）  
 useMemoを導入しています。  
 メモの個別追加・編集・削除（CRUD）に対応し、localStorageで永続化しています。  
-React Hook Formによる入力バリデーション（必須項目・文字数制限）を実装しています。
+React Hook Formによる入力バリデーション（必須項目・文字数制限）を実装しています。  
+検索・並び替えロジックを純粋関数（src/utils/memoUtils.ts）に切り出し、Vitest + React Testing Libraryで単体テスト・結合テストを実装しています（21件）。
+
+【テストの実行方法】  
+`npm test`
 
 【得られた学び / 挑戦した点】  
 TypeScriptでtypeエイリアスを使った型定義の使い方を学びました。  
 （ここは実装後にご自身の言葉で追記してください）
 
 【次回以降】  
-テスト（Vitest + React Testing Library）の導入、型安全性の改善（as キャストの削減）を予定。
+型安全性の改善（as キャストの削減）、GitHub Actionsによるlint/test/buildの自動化を予定。

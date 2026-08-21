@@ -5,10 +5,13 @@ import MemoForm from './components/MemoForm';
 import type { MemoFormValues } from './components/MemoForm';
 import { defaultMemos } from './memo_data';
 import type { Memo } from './types';
+import {
+  filterAndSortMemos,
+  generateNextId,
+  type SortField,
+  type SortOrder,
+} from './utils/memoUtils';
 import './App.css';
-
-type SortField = 'id' | 'title' | 'date';
-type SortOrder = 'asc' | 'desc';
 
 const STORAGE_KEY = 'memolist1_memos';
 
@@ -38,14 +41,8 @@ const App = () => {
   }, [memos]);
 
   const addMemo = (values: MemoFormValues) => {
-    const nextId =
-      memos.length > 0
-        ? (
-            Math.max(...memos.map((memo) => parseInt(memo.id, 10) || 0)) + 1
-          ).toString()
-        : '1';
     const newMemo: Memo = {
-      id: nextId,
+      id: generateNextId(memos),
       title: values.title,
       content: values.content,
       date: new Date().toISOString().slice(0, 10),
@@ -88,28 +85,10 @@ const App = () => {
     setEditingMemo((current) => (current?.id === id ? null : current));
   };
 
-  const filteredMemos = useMemo(() => {
-    const lowerCaseFilter = (filter || '').toLowerCase();
-    const filtered = memos.filter((memo) =>
-      memo.title.toLowerCase().includes(lowerCaseFilter),
-    );
-    return [...filtered].sort((a, b) => {
-      const aValue = a[sortField];
-      const bValue = b[sortField];
-      if (sortField === 'date') {
-        const dateA = new Date(aValue).getTime();
-        const dateB = new Date(bValue).getTime();
-        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-      } else if (sortField === 'id') {
-        const idA = parseInt(aValue, 10);
-        const idB = parseInt(bValue, 10);
-        return sortOrder === 'asc' ? idA - idB : idB - idA;
-      } else {
-        const compareResult = aValue.localeCompare(bValue);
-        return sortOrder === 'asc' ? compareResult : -compareResult;
-      }
-    });
-  }, [filter, sortField, sortOrder, memos]);
+  const filteredMemos = useMemo(
+    () => filterAndSortMemos(memos, filter, sortField, sortOrder),
+    [memos, filter, sortField, sortOrder],
+  );
 
   return (
     <div className="container">
