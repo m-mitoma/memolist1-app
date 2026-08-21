@@ -1,13 +1,24 @@
 import type { Memo } from '../types';
+import type { MemoFormValues } from './MemoForm';
+import MemoListItem from './MemoListItem';
 
 type MemoListProps = {
   memos: Memo[];
-  onEdit: (memo: Memo) => void;
-  onDelete: (id: string) => void;
   editingId: string | null;
+  onStartEdit: (id: string) => void;
+  onCancelEdit: () => void;
+  onUpdate: (id: string, values: MemoFormValues) => void;
+  onDelete: (id: string) => void;
 };
 
-const MemoList = ({ memos, onEdit, onDelete, editingId }: MemoListProps) => {
+const MemoList = ({
+  memos,
+  editingId,
+  onStartEdit,
+  onCancelEdit,
+  onUpdate,
+  onDelete,
+}: MemoListProps) => {
   if (memos.length === 0) {
     return <p className="no-memos-message">表示するメモがありません。</p>;
   }
@@ -15,27 +26,15 @@ const MemoList = ({ memos, onEdit, onDelete, editingId }: MemoListProps) => {
   return (
     <ul>
       {memos.map((memo) => (
-        <li
+        <MemoListItem
           key={memo.id}
-          className={memo.id === editingId ? 'editing-item' : ''}
-        >
-          <h3>{memo.title}</h3>
-          <span>ID: {memo.id}</span>
-          <span>{memo.date}</span>
-          <p>{memo.content}</p>
-          <div className="memo-item-buttons">
-            <button type="button" onClick={() => onEdit(memo)}>
-              編集
-            </button>
-            <button
-              type="button"
-              onClick={() => onDelete(memo.id)}
-              className="delete-button"
-            >
-              削除
-            </button>
-          </div>
-        </li>
+          memo={memo}
+          isEditing={memo.id === editingId}
+          onStartEdit={onStartEdit}
+          onCancelEdit={onCancelEdit}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+        />
       ))}
     </ul>
   );

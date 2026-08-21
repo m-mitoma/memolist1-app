@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -41,7 +41,7 @@ describe('App（メモの追加・編集・削除・永続化）', () => {
     ).toBe(true);
   });
 
-  it('メモを編集すると内容が更新される', async () => {
+  it('編集ボタンを押すと、そのメモのカード内にインライン編集フォームが表示され、更新できる', async () => {
     const user = userEvent.setup();
     render(<App />);
 
@@ -50,18 +50,22 @@ describe('App（メモの追加・編集・削除・永続化）', () => {
     const memoItem = screen.getByText('編集前のタイトル').closest('li');
     expect(memoItem).not.toBeNull();
 
-    const editButton = screen.getAllByRole('button', { name: '編集' })
-      .find((button) => memoItem?.contains(button));
-    expect(editButton).toBeDefined();
-    await user.click(editButton!);
+    // カード内の「編集」ボタンを押す（画面上部のフォームには戻らない）
+    await user.click(within(memoItem!).getByRole('button', { name: '編集' }));
 
-    const titleInput = screen.getByLabelText('タイトル');
+    // 同じカードの中にインラインフォームが現れる
+    const titleInput = within(memoItem!).getByLabelText('タイトル');
+    expect(titleInput).toHaveValue('編集前のタイトル');
     await user.clear(titleInput);
     await user.type(titleInput, '編集後のタイトル');
-    await user.click(screen.getByRole('button', { name: '更新する' }));
+    await user.click(
+      within(memoItem!).getByRole('button', { name: '更新する' }),
+    );
 
     expect(screen.getByText('編集後のタイトル')).toBeInTheDocument();
     expect(screen.queryByText('編集前のタイトル')).not.toBeInTheDocument();
+    // 画面上部の追加フォームは編集の影響を受けず空のまま
+    expect(screen.getAllByLabelText('タイトル')[0]).toHaveValue('');
   });
 
   it('削除ボタンを押して確認すると、メモが一覧から消える', async () => {

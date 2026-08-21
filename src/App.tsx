@@ -33,14 +33,15 @@ const App = () => {
   const [filter, setFilter] = useState<string>('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
-  const [editingMemo, setEditingMemo] = useState<Memo | null>(null);
+  // 今どのメモが編集中か（IDのみ保持。フォームの初期値は各カード側で持つ）
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   // memosが変わるたびにlocalStorageへ保存する
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(memos));
   }, [memos]);
 
-  const addMemo = (values: MemoFormValues) => {
+  const handleAdd = (values: MemoFormValues) => {
     const newMemo: Memo = {
       id: generateNextId(memos),
       title: values.title,
@@ -50,7 +51,15 @@ const App = () => {
     setMemos((prev) => [...prev, newMemo]);
   };
 
-  const updateMemo = (id: string, values: MemoFormValues) => {
+  const handleStartEdit = (id: string) => {
+    setEditingId(id);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+  };
+
+  const handleUpdate = (id: string, values: MemoFormValues) => {
     setMemos((prev) =>
       prev.map((memo) =>
         memo.id === id
@@ -58,23 +67,7 @@ const App = () => {
           : memo,
       ),
     );
-  };
-
-  const handleFormSubmit = (values: MemoFormValues) => {
-    if (editingMemo) {
-      updateMemo(editingMemo.id, values);
-      setEditingMemo(null);
-    } else {
-      addMemo(values);
-    }
-  };
-
-  const handleEdit = (memo: Memo) => {
-    setEditingMemo(memo);
-  };
-
-  const handleCancelEdit = () => {
-    setEditingMemo(null);
+    setEditingId(null);
   };
 
   const handleDelete = (id: string) => {
@@ -82,7 +75,7 @@ const App = () => {
       return;
     }
     setMemos((prev) => prev.filter((memo) => memo.id !== id));
-    setEditingMemo((current) => (current?.id === id ? null : current));
+    setEditingId((current) => (current === id ? null : current));
   };
 
   const filteredMemos = useMemo(
@@ -94,11 +87,7 @@ const App = () => {
     <div className="container">
       <h1>簡易メモリスト</h1>
       <h2>検索・並び替え・編集</h2>
-      <MemoForm
-        onSubmit={handleFormSubmit}
-        editingMemo={editingMemo}
-        onCancelEdit={handleCancelEdit}
-      />
+      <MemoForm onAdd={handleAdd} />
       <MemoFilter filter={filter} setFilter={setFilter} />
       <button
         onClick={() => {
@@ -150,9 +139,11 @@ const App = () => {
       </button>
       <MemoList
         memos={filteredMemos}
-        onEdit={handleEdit}
+        editingId={editingId}
+        onStartEdit={handleStartEdit}
+        onCancelEdit={handleCancelEdit}
+        onUpdate={handleUpdate}
         onDelete={handleDelete}
-        editingId={editingMemo ? editingMemo.id : null}
       />
     </div>
   );

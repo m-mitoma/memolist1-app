@@ -82,7 +82,8 @@ input[type='text'] {
   margin: 20px 0;
 }
 
-.memo-form label {
+.memo-form label,
+.memo-edit-form label {
   display: block;
   margin-bottom: 5px;
   font-size: 0.9em;
@@ -90,7 +91,9 @@ input[type='text'] {
 }
 
 .memo-form input[type='text'],
-.memo-form textarea {
+.memo-form textarea,
+.memo-edit-form input[type='text'],
+.memo-edit-form textarea {
   width: 100%;
   padding: 10px;
   font-size: 1em;
@@ -99,6 +102,11 @@ input[type='text'] {
   border-radius: 5px;
   box-sizing: border-box;
   margin-bottom: 15px;
+}
+
+/* インライン編集フォームは、既にliの背景・影・パディングがあるので余分な箱を作らない */
+.memo-edit-form {
+  display: block;
 }
 
 .form-error {
