@@ -2,10 +2,12 @@ import { useMemo, useState } from 'react';
 import MemoList from './components/MemoList';
 import MemoFilter from './components/MemoFilter';
 import MemoForm from './components/MemoForm';
+import MonthlyArchive from './components/MonthlyArchive';
 import type { MemoFormValues } from './components/MemoForm';
 import { useMemos } from './hooks/useMemos';
 import {
   filterAndSortMemos,
+  groupMemosByMonth,
   type SortField,
   type SortOrder,
 } from './utils/memoUtils';
@@ -18,6 +20,8 @@ const App = () => {
   const [filter, setFilter] = useState<string>('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  // 月別アーカイブで選択中の月（例: "2025-01"）。未選択ならnull
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   // 今どのメモが編集中か（IDのみ保持。フォームの初期値は各カード側で持つ）
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -43,9 +47,11 @@ const App = () => {
   };
 
   const filteredMemos = useMemo(
-    () => filterAndSortMemos(memos, filter, sortField, sortOrder),
-    [memos, filter, sortField, sortOrder],
+    () => filterAndSortMemos(memos, filter, sortField, sortOrder, selectedMonth),
+    [memos, filter, sortField, sortOrder, selectedMonth],
   );
+
+  const monthlyArchive = useMemo(() => groupMemosByMonth(memos), [memos]);
 
   return (
     <div className="container">
@@ -53,6 +59,11 @@ const App = () => {
       <h2>検索・並び替え・編集</h2>
       <MemoForm onAdd={addMemo} />
       <MemoFilter filter={filter} setFilter={setFilter} />
+      <MonthlyArchive
+        entries={monthlyArchive}
+        selectedMonth={selectedMonth}
+        onSelectMonth={setSelectedMonth}
+      />
       <button
         onClick={() => {
           setSortField('id');

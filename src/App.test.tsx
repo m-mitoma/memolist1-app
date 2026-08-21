@@ -127,4 +127,18 @@ describe('App（メモの追加・編集・削除・永続化）', () => {
 
     expect(screen.getByText('表示するメモがありません。')).toBeInTheDocument();
   });
+
+  it('月別アーカイブで月を選ぶと、その月のメモだけに絞り込まれ、「すべて表示」で戻る', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    // 初期データは2025年1月が6件・2025年2月が4件
+    expect(screen.getAllByText(/^ID: /)).toHaveLength(10);
+
+    await user.click(screen.getByRole('button', { name: '2025年1月 (6)' }));
+    expect(screen.getAllByText(/^ID: /)).toHaveLength(6);
+
+    await user.click(screen.getByRole('button', { name: 'すべて表示' }));
+    expect(screen.getAllByText(/^ID: /)).toHaveLength(10);
+  });
 });

@@ -3,7 +3,7 @@
 [![CI](https://github.com/m-mitoma/memolist1-app/actions/workflows/ci.yml/badge.svg)](https://github.com/m-mitoma/memolist1-app/actions/workflows/ci.yml)
 
 React基礎学習後3回目に作ったアプリです。  
-この簡易メモリスト作成アプリは、検索・並び替え・メモの追加/編集/削除ができます。
+この簡易メモリスト作成アプリは、検索・並び替え・月別アーカイブ・メモの追加/編集/削除ができます。
 
 【URL】  
 https://memolist1-app.vercel.app/
@@ -15,7 +15,7 @@ https://memolist1-app.vercel.app/
 【技術スタック】  
 フロントエンド: React, TypeScript, Vite, React Hook Form  
 テスト: Vitest, React Testing Library  
-CI: GitHub Actions（lint・test・buildの自動実行）   
+CI/CD: GitHub Actions（lint・test・buildの自動実行）  
 デプロイ・インフラ: Vercel  
 バージョン管理: Git, GitHub  
 パッケージ管理: npm  
@@ -25,19 +25,20 @@ CI: GitHub Actions（lint・test・buildの自動実行）
 【実装上の工夫】  
 TypeScriptを導入（リファクタリング）  
 useMemoを導入しています。  
-メモの追加・編集（インライン編集）・削除（CRUD）に対応し、localStorageで永続化しています。  
+メモの個別追加・編集（インライン編集）・削除（CRUD）に対応し、localStorageで永続化しています。  
 React Hook Formによる入力バリデーション（必須項目・文字数制限）を実装しています。  
-検索・並び替えロジックを純粋関数（src/utils/memoUtils.ts）に切り出し、Vitest + React Testing Libraryで単体テスト・結合テストを実装しています（37件）。  
+検索・並び替えロジックを純粋関数（src/utils/memoUtils.ts）に切り出し、Vitest + React Testing Libraryで単体テスト・結合テストを実装しています（50件）。  
+メモの作成日をもとに月ごとの件数を集計し、ブログのアーカイブのようにクリックでその月のメモだけに絞り込める「月別アーカイブ」機能を実装しています。  
 localStorageから読み込んだデータを`as`で無条件にキャストせず、型ガード（src/utils/memoValidation.ts）で実際の形を確認してから使うようにしています。想定と異なるデータが入っていた場合は初期データにフォールバックします。  
 メモの状態管理・localStorageへの永続化ロジックをカスタムフック（src/hooks/useMemos.ts）に切り出し、Appコンポーネントは画面の組み立てに専念する構成にしています。  
-GitHub Actionsを導入し、`main`へのpush・プルリクエストのたびにlint・test（37件）・buildを自動実行するCIを構築しています（.github/workflows/ci.yml）。コード品質のチェックを自動化し、変更による問題を早期に検知できるようにしています。
+GitHub Actionsを導入し、`main`へのpush・プルリクエストのたびにlint・test・buildを自動実行するCIを構築しています（.github/workflows/ci.yml）。コード品質のチェックが自動化されることで、コミット漏れや意図しないバグの混入にすぐ気づける状態にしています。
 
 【テストの実行方法】  
 `npm test`
 
 【得られた学び / 挑戦した点】  
 TypeScriptでtypeエイリアスを使った型定義の使い方を学びました。  
-テストがすべて通ったときや、CIがPassingになったときに、コードを安全に変更できる仕組みの重要性を実感しました。
+（ここは実装後にご自身の言葉で追記してください）
 
 【次回以降】  
 特になし（継続的に改善予定）。

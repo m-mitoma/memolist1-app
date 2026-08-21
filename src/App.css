@@ -146,3 +146,29 @@ input[type='text'] {
   text-align: center;
   color: #7d7878;
 }
+
+.monthly-archive {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.monthly-archive button {
+  margin: 0;
+  padding: 6px 14px;
+  font-size: 0.9em;
+  background-color: #fff;
+  color: #353535;
+  border: 1px solid #ddd;
+}
+
+.monthly-archive button:hover {
+  background-color: #f5f0ea;
+}
+
+.monthly-archive button.active-month {
+  background-color: #353535;
+  color: #fff;
+  border-color: #353535;
+}

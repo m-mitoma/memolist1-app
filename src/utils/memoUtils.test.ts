@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { filterAndSortMemos, generateNextId } from './memoUtils';
+import {
+  filterAndSortMemos,
+  generateNextId,
+  getMonthKey,
+  groupMemosByMonth,
+} from './memoUtils';
 import type { Memo } from '../types';
 
 const sampleMemos: Memo[] = [
@@ -59,6 +64,70 @@ describe('filterAndSortMemos', () => {
   it('該当するメモが無ければ空配列を返す', () => {
     const result = filterAndSortMemos(sampleMemos, '存在しないキーワード', 'date', 'asc');
     expect(result).toEqual([]);
+  });
+
+  it('selectedMonthを指定すると、その月のメモだけに絞り込まれる', () => {
+    const memos: Memo[] = [
+      ...sampleMemos, // すべて2025-01
+      { id: '4', title: '2月のメモ', date: '2025-02-01', content: '' },
+    ];
+    const result = filterAndSortMemos(memos, '', 'date', 'asc', '2025-02');
+    expect(result.map((memo) => memo.id)).toEqual(['4']);
+  });
+
+  it('selectedMonthがnullなら月による絞り込みはされない（従来通り）', () => {
+    const result = filterAndSortMemos(sampleMemos, '', 'date', 'asc', null);
+    expect(result).toHaveLength(3);
+  });
+
+  it('検索キーワードとselectedMonthを両方指定すると、両方の条件で絞り込まれる', () => {
+    const memos: Memo[] = [
+      { id: '1', title: '買い物メモ', date: '2025-01-05', content: '' },
+      { id: '2', title: '買い物メモ', date: '2025-02-05', content: '' },
+      { id: '3', title: '会議メモ', date: '2025-01-10', content: '' },
+    ];
+    const result = filterAndSortMemos(memos, '買い物', 'date', 'asc', '2025-01');
+    expect(result.map((memo) => memo.id)).toEqual(['1']);
+  });
+});
+
+describe('getMonthKey', () => {
+  it('"YYYY-MM-DD"形式の文字列から"YYYY-MM"を取り出す', () => {
+    expect(getMonthKey('2025-01-05')).toBe('2025-01');
+    expect(getMonthKey('2025-12-31')).toBe('2025-12');
+  });
+});
+
+describe('groupMemosByMonth', () => {
+  it('年月ごとの件数を集計する', () => {
+    const memos: Memo[] = [
+      { id: '1', title: '', date: '2025-01-05', content: '' },
+      { id: '2', title: '', date: '2025-01-20', content: '' },
+      { id: '3', title: '', date: '2025-02-01', content: '' },
+    ];
+    const result = groupMemosByMonth(memos);
+    expect(result).toEqual([
+      { key: '2025-02', label: '2025年2月', count: 1 },
+      { key: '2025-01', label: '2025年1月', count: 2 },
+    ]);
+  });
+
+  it('新しい月が先頭に来るよう並ぶ', () => {
+    const memos: Memo[] = [
+      { id: '1', title: '', date: '2024-06-01', content: '' },
+      { id: '2', title: '', date: '2025-01-01', content: '' },
+      { id: '3', title: '', date: '2024-12-01', content: '' },
+    ];
+    const result = groupMemosByMonth(memos);
+    expect(result.map((entry) => entry.key)).toEqual([
+      '2025-01',
+      '2024-12',
+      '2024-06',
+    ]);
+  });
+
+  it('メモが無ければ空配列を返す', () => {
+    expect(groupMemosByMonth([])).toEqual([]);
   });
 });
 
