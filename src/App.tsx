@@ -1,64 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import MemoList from './components/MemoList';
 import MemoFilter from './components/MemoFilter';
 import MemoForm from './components/MemoForm';
 import type { MemoFormValues } from './components/MemoForm';
-import { defaultMemos } from './memo_data';
-import type { Memo } from './types';
+import { useMemos } from './hooks/useMemos';
 import {
   filterAndSortMemos,
-  generateNextId,
   type SortField,
   type SortOrder,
 } from './utils/memoUtils';
-import { isMemoArray } from './utils/memoValidation';
 import './App.css';
 
-const STORAGE_KEY = 'memolist1_memos';
-
-// localStorageに保存済みのメモがあればそれを、無ければ初期データを使う
-const loadInitialMemos = (): Memo[] => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      // JSON.parseの戻り値はany型なので、まずunknownとして受け取り、
-      // isMemoArrayで実際にMemo[]の形をしているか確認してから使う。
-      const parsed: unknown = JSON.parse(saved);
-      if (isMemoArray(parsed)) {
-        return parsed;
-      }
-      console.warn(
-        'localStorageのメモの形式が想定と異なるため、初期データを使用します',
-      );
-    }
-  } catch (error) {
-    console.error('メモの読み込みに失敗しました', error);
-  }
-  return defaultMemos;
-};
-
 const App = () => {
-  const [memos, setMemos] = useState<Memo[]>(loadInitialMemos);
+  // メモの状態管理・localStorageへの保存は useMemos に任せる。
+  // Appは「画面をどう組み立てるか」だけに専念する。
+  const { memos, addMemo, updateMemo, deleteMemo } = useMemos();
   const [filter, setFilter] = useState<string>('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   // 今どのメモが編集中か（IDのみ保持。フォームの初期値は各カード側で持つ）
   const [editingId, setEditingId] = useState<string | null>(null);
-
-  // memosが変わるたびにlocalStorageへ保存する
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(memos));
-  }, [memos]);
-
-  const handleAdd = (values: MemoFormValues) => {
-    const newMemo: Memo = {
-      id: generateNextId(memos),
-      title: values.title,
-      content: values.content,
-      date: new Date().toISOString().slice(0, 10),
-    };
-    setMemos((prev) => [...prev, newMemo]);
-  };
 
   const handleStartEdit = (id: string) => {
     setEditingId(id);
@@ -69,13 +30,7 @@ const App = () => {
   };
 
   const handleUpdate = (id: string, values: MemoFormValues) => {
-    setMemos((prev) =>
-      prev.map((memo) =>
-        memo.id === id
-          ? { ...memo, title: values.title, content: values.content }
-          : memo,
-      ),
-    );
+    updateMemo(id, values);
     setEditingId(null);
   };
 
@@ -83,7 +38,7 @@ const App = () => {
     if (!window.confirm('このメモを削除してもよろしいですか？')) {
       return;
     }
-    setMemos((prev) => prev.filter((memo) => memo.id !== id));
+    deleteMemo(id);
     setEditingId((current) => (current === id ? null : current));
   };
 
@@ -96,7 +51,7 @@ const App = () => {
     <div className="container">
       <h1>簡易メモリスト</h1>
       <h2>検索・並び替え・編集</h2>
-      <MemoForm onAdd={handleAdd} />
+      <MemoForm onAdd={addMemo} />
       <MemoFilter filter={filter} setFilter={setFilter} />
       <button
         onClick={() => {
