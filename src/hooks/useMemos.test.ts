@@ -22,7 +22,7 @@ describe('useMemos', () => {
     });
 
     expect(result.current.memos).toHaveLength(11);
-    expect(result.current.memos.at(-1)).toMatchObject({
+    expect(result.current.memos[result.current.memos.length - 1]).toMatchObject({
       title: '新規メモ',
       content: '内容',
     });

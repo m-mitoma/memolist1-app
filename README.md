@@ -1,5 +1,7 @@
 簡易メモリスト作成アプリ
 
+[![CI](https://github.com/m-mitoma/memolist1-app/actions/workflows/ci.yml/badge.svg)](https://github.com/m-mitoma/memolist1-app/actions/workflows/ci.yml)
+
 React基礎学習後3回目に作ったアプリです。  
 この簡易メモリスト作成アプリは、検索・並び替え・メモの追加/編集/削除ができます。
 
@@ -24,15 +26,17 @@ TypeScriptを導入（リファクタリング）
 useMemoを導入しています。  
 メモの個別追加・編集（インライン編集）・削除（CRUD）に対応し、localStorageで永続化しています。  
 React Hook Formによる入力バリデーション（必須項目・文字数制限）を実装しています。  
-検索・並び替えロジックを純粋関数（src/utils/memoUtils.ts）に切り出し、Vitest + React Testing Libraryで単体テスト・結合テストを実装しています（32件）。  
+検索・並び替えロジックを純粋関数（src/utils/memoUtils.ts）に切り出し、Vitest + React Testing Libraryで単体テスト・結合テストを実装しています（37件）。  
 localStorageから読み込んだデータを`as`で無条件にキャストせず、型ガード（src/utils/memoValidation.ts）で実際の形を確認してから使うようにしています。想定と異なるデータが入っていた場合は初期データにフォールバックします。  
-メモの状態管理・localStorageへの永続化ロジックをカスタムフック（src/hooks/useMemos.ts）に切り出し、Appコンポーネントは画面の組み立てに専念する構成にしています。
+メモの状態管理・localStorageへの永続化ロジックをカスタムフック（src/hooks/useMemos.ts）に切り出し、Appコンポーネントは画面の組み立てに専念する構成にしています。  
+GitHub Actionsを導入し、pushのたびにlint・test・buildを自動実行するCIを構築しています（.github/workflows/ci.yml）。
 
 【テストの実行方法】  
 `npm test`
 
 【得られた学び / 挑戦した点】  
 TypeScriptでtypeエイリアスを使った型定義の使い方を学びました。  
+（ここは実装後にご自身の言葉で追記してください）
 
 【次回以降】  
-GitHub Actionsによるlint/test/buildの自動化を予定。
+特になし（継続的に改善予定）。
