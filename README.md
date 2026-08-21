@@ -15,7 +15,7 @@ https://memolist1-app.vercel.app/
 【技術スタック】  
 フロントエンド: React, TypeScript, Vite, React Hook Form  
 テスト: Vitest, React Testing Library  
-CI: GitHub Actions（lint・test・buildの自動実行） 
+CI: GitHub Actions（lint・test・buildの自動実行）   
 デプロイ・インフラ: Vercel  
 バージョン管理: Git, GitHub  
 パッケージ管理: npm  
